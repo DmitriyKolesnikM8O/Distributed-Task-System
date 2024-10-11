@@ -10,7 +10,7 @@ import (
 func InitDB() (*pgx.Conn, error) {
 
 	log.Printf("Init DB")
-	db, err := pgx.Connect(context.Background(), "postgres://postgres:postgres@localhost:5432/postgres")
+	db, err := pgx.Connect(context.Background(), "postgres://postgres:postgres@postgres:5432/postgres")
 
 	if err != nil {
 		log.Fatal(err)

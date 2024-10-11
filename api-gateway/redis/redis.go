@@ -15,7 +15,7 @@ var (
 func InitRedis() *redis.Client {
 	log.Printf("Init redis")
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
+		Addr: "redis:6379",
 	})
 
 	_, err := rdb.Ping(Ctx).Result()

@@ -20,7 +20,25 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./data:/data
+      - ./data:/data  
+  auth-service:
+    build:
+      context: ./auth-service  # Обрати внимание на путь
+      dockerfile: Dockerfile
+    container_name: auth-service-container
+    ports:
+      - "8081:8081"
+
+
+  api-gateway:
+    build:
+      context: ./api-gateway  # Убедись, что путь верный
+      dockerfile: Dockerfile
+    container_name: api-gateway-container
+    ports:
+      - "8080:8080"
+
+  
 
 
 volumes:
