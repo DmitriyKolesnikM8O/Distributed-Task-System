@@ -22,7 +22,7 @@ func GetConfig() *Config {
 		if err != nil {
 			log.Fatalf("Error getting working directory: %s", err)
 		}
-		configPath := filepath.Join(wd, "..", "..", "internal/config/config.yml")
+		configPath := filepath.Join(wd, "internal/config/config.yml")
 		err = cleanenv.ReadConfig(configPath, instance)
 		if err != nil {
 			log.Fatalf("Config error: %s", err)
