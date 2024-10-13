@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/redis"
-	"github.com/KolesnikM8O/distributed-task-system/api-gateway/repository"
+	repository "github.com/KolesnikM8O/distributed-task-system/api-gateway/repository/postgreSQL"
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/service/handlers"
 	"github.com/gorilla/mux"
 )
@@ -17,6 +17,7 @@ func Start(r *mux.Router) {
 	log.Printf("Init redis")
 	redis.InitRedis()
 
+	repository := repository.New()
 	db, err := repository.InitDB()
 	if err != nil {
 		log.Fatal(err)

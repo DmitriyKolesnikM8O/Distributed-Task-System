@@ -26,7 +26,7 @@ services:
       context: ./auth-service  # Обрати внимание на путь
       dockerfile: Dockerfile
     container_name: auth-service-container
-    restart: always
+    # restart: always
     ports:
       - "8081:8081"
 
@@ -36,7 +36,7 @@ services:
       context: ./api-gateway  # Убедись, что путь верный
       dockerfile: Dockerfile
     container_name: api-gateway-container
-    restart: always
+    # restart: always
     ports:
       - "8080:8080"
 
