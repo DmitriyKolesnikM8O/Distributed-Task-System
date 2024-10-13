@@ -20,12 +20,8 @@ func Start(r *mux.Router) {
 	}
 	defer db.Close(context.Background())
 
-	r.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		handlers.LoginHandler(w, r, db)
-	}).Methods("POST")
-	r.HandleFunc("/signup", func(w http.ResponseWriter, r *http.Request) {
-		handlers.SignupHandler(w, r, db)
-	}).Methods("POST")
+	service := handlers.New(db)
+	service.Register(r)
 
 	log.Printf("Listening on :8081")
 	log.Fatal(http.ListenAndServe(":8081", r))

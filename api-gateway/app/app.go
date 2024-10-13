@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/KolesnikM8O/distributed-task-system/api-gateway/middleware"
-
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/redis"
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/repository"
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/service/handlers"
@@ -25,22 +23,9 @@ func Start(r *mux.Router) {
 	}
 	defer db.Close(context.Background())
 	log.Printf("DB connected")
-	r.HandleFunc("/task", middleware.JWTMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		handlers.CreateTaskHandler(w, r, db)
-	})).Methods("POST")
 
-	r.HandleFunc("/task/{id}", middleware.JWTMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		handlers.GetTaskHandler(w, r, db)
-	})).Methods("GET")
-
-	r.HandleFunc("/task/{id}", middleware.JWTMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		handlers.UpdateTaskHandler(w, r, db)
-	})).Methods("PUT")
-
-	r.HandleFunc("/task/{id}", middleware.JWTMiddleware(func(w http.ResponseWriter, r *http.Request) {
-		handlers.DeleteTaskHandler(w, r, db)
-	})).Methods("DELETE")
-
+	service := handlers.New(db)
+	service.Register(r)
 	log.Printf("Listening on :8080")
 	http.ListenAndServe(":8080", r)
 }
