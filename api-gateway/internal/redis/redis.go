@@ -2,20 +2,24 @@ package redis
 
 import (
 	"context"
+	"fmt"
 	"log"
 
+	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/config/config"
 	"github.com/go-redis/redis/v8"
 )
 
 var (
-	RDB = InitRedis()
+	cfg = config.GetConfig().Redis
+	RDB = InitRedis(&cfg)
 	Ctx = context.Background()
 )
 
-func InitRedis() *redis.Client {
+func InitRedis(cfg *config.RedisConfig) *redis.Client {
 	log.Printf("Init redis")
+	addrString := fmt.Sprintf("%s:%s", cfg.Host, cfg.Port)
 	rdb := redis.NewClient(&redis.Options{
-		Addr: "redis:6379",
+		Addr: addrString,
 	})
 
 	_, err := rdb.Ping(Ctx).Result()

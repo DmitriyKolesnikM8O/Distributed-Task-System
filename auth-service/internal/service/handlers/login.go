@@ -7,9 +7,15 @@ import (
 	"net/http"
 	"time"
 
-	model "github.com/KolesnikM8O/distributed-task-system/auth-service/service/model"
+	"github.com/KolesnikM8O/distributed-task-system/auth-service/internal/config/config"
+	model "github.com/KolesnikM8O/distributed-task-system/auth-service/internal/service/model"
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
+)
+
+var (
+	cfg       = config.GetConfig()
+	secretKey = []byte(cfg.SecretKey.Secret)
 )
 
 func (s *service) LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -48,6 +54,7 @@ func (s *service) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		"user_id": user.ID,
 		"role":    user.Role,
 	})
+
 	tokenString, err := token.SignedString([]byte("secret_key"))
 	if err != nil {
 		log.Printf("Error signing token: %s", err)

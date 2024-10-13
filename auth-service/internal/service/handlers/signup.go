@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	model "github.com/KolesnikM8O/distributed-task-system/auth-service/service/model"
+	model "github.com/KolesnikM8O/distributed-task-system/auth-service/internal/service/model"
 	"golang.org/x/crypto/bcrypt"
 )
 

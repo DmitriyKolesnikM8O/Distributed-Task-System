@@ -2,9 +2,11 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"log"
 
-	repository "github.com/KolesnikM8O/distributed-task-system/api-gateway/repository"
+	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/config/config"
+	repository "github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/repository"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -18,10 +20,12 @@ func New() repository.Repository {
 	}
 }
 
-func (r *Repository) InitDB() (*pgx.Conn, error) {
+func (r *Repository) InitDB(cfg *config.StorageConfig) (*pgx.Conn, error) {
 
 	log.Printf("Init DB")
-	db, err := pgx.Connect(context.Background(), "postgres://postgres:postgres@postgres:5432/postgres")
+
+	connectString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Database)
+	db, err := pgx.Connect(context.Background(), connectString)
 
 	if err != nil {
 		log.Fatal(err)

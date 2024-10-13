@@ -5,7 +5,13 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/config/config"
 	"github.com/golang-jwt/jwt"
+)
+
+var (
+	cfg       = config.GetConfig()
+	secretKey = []byte(cfg.SecretKey.Secret)
 )
 
 func JWTMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(http.ResponseWriter, *http.Request) {
@@ -18,7 +24,7 @@ func JWTMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(http.
 		}
 
 		token, err := jwt.ParseWithClaims(cookie.Value, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-			return []byte("secret_key"), nil
+			return secretKey, nil
 		})
 		if err != nil {
 			log.Printf("JWT невалиден: %s", err)

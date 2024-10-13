@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/KolesnikM8O/distributed-task-system/api-gateway/middleware"
-	"github.com/KolesnikM8O/distributed-task-system/api-gateway/service/url"
+	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/middleware"
+	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/service/url"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v5"
 )

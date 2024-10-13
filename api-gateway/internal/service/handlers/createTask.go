@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/KolesnikM8O/distributed-task-system/api-gateway/service/model"
+	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/service/model"
 	"github.com/google/uuid"
 )
 

@@ -2,8 +2,10 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"log"
 
+	"github.com/KolesnikM8O/distributed-task-system/auth-service/internal/config/config"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -17,10 +19,12 @@ func New() *Repository {
 	}
 }
 
-func (r *Repository) InitDB() (*pgx.Conn, error) {
+func (r *Repository) InitDB(cfg *config.StorageConfig) (*pgx.Conn, error) {
 
 	log.Printf("Init DB")
-	db, err := pgx.Connect(context.Background(), "postgres://postgres:postgres@postgres:5432/postgres")
+	//db, err := pgx.Connect(context.Background(), "postgres://postgres:postgres@postgres:5432/postgres")
+	dbString := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", cfg.Username, cfg.Password, cfg.Host, cfg.Port, cfg.Database)
+	db, err := pgx.Connect(context.Background(), dbString)
 
 	if err != nil {
 		log.Fatal(err)

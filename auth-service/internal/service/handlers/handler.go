@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/KolesnikM8O/distributed-task-system/auth-service/service/url"
+	"github.com/KolesnikM8O/distributed-task-system/auth-service/internal/service/url"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v5"
 )

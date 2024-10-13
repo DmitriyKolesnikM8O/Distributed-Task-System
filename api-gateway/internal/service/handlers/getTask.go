@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/KolesnikM8O/distributed-task-system/api-gateway/redis"
+	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/redis"
 	"github.com/gorilla/mux"
 )
 
