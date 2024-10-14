@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/redis"
 	"github.com/gorilla/mux"
 )
 
@@ -35,7 +34,7 @@ func (s *service) UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = redis.RDB.Set(redis.Ctx, id, status, 0).Err()
+	err = s.rdb.Set(s.rdb.Context(), id, status, 0).Err()
 	if err != nil {
 		log.Printf("Error saving task to Redis: %s", err)
 	}

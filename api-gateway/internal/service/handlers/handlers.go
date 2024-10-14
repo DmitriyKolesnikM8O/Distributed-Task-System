@@ -5,17 +5,20 @@ import (
 
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/middleware"
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/service/url"
+	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
 	"github.com/jackc/pgx/v5"
 )
 
 type service struct {
-	db *pgx.Conn
+	db  *pgx.Conn
+	rdb *redis.Client
 }
 
-func New(db *pgx.Conn) *service {
+func New(db *pgx.Conn, rdb *redis.Client) *service {
 	return &service{
-		db: db,
+		db:  db,
+		rdb: rdb,
 	}
 }
 

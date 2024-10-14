@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/redis"
 	"github.com/gorilla/mux"
 )
 
@@ -15,8 +14,7 @@ func (s *service) GetTaskHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-
-	val, err := redis.RDB.Get(redis.Ctx, id).Result()
+	val, err := s.rdb.Get(s.rdb.Context(), id).Result()
 	if err != nil {
 		if err.Error() == "redis: nil" {
 			var status string
@@ -26,7 +24,7 @@ func (s *service) GetTaskHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			err = redis.RDB.Set(redis.Ctx, id, status, 0).Err()
+			err = s.rdb.Set(s.rdb.Context(), id, status, 0).Err()
 			if err != nil {
 				log.Printf("Ошибка сохранения записи в Redis: %s", err)
 			}

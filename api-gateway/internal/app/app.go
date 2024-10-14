@@ -18,7 +18,11 @@ func Start(r *mux.Router) {
 	cfg := config.GetConfig()
 
 	log.Printf("Init redis")
-	redis.InitRedis(&cfg.Redis)
+	rdb, err := redis.InitRedis(&cfg.Redis)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Printf("Redis connected")
 
 	repository := repository.New()
 	db, err := repository.InitDB(&cfg.Storage)
@@ -28,7 +32,7 @@ func Start(r *mux.Router) {
 	defer db.Close(context.Background())
 	log.Printf("DB connected")
 
-	service := handlers.New(db)
+	service := handlers.New(db, rdb)
 	service.Register(r)
 
 	port := cfg.Listen.Port
