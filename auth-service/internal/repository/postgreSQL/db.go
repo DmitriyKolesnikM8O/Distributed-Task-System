@@ -27,7 +27,7 @@ func (r *Repository) InitDB(cfg *config.StorageConfig) (*pgx.Conn, error) {
 	db, err := pgx.Connect(context.Background(), dbString)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Failed to connect db: %s", err)
 		return nil, err
 	}
 	r.db = db

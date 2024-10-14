@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/config/config"
@@ -41,4 +42,20 @@ func TestInitRedisError(t *testing.T) {
 		t.Errorf("InitRedis should return an error")
 	}
 
+}
+
+func TestInitRedisErrorPort(t *testing.T) {
+	fakeConfig := &config.RedisConfig{
+		Host: Host,
+		Port: FakePort,
+	}
+
+	_, err := InitRedis(fakeConfig)
+	if err == nil {
+		t.Errorf("InitRedis should return an error")
+	}
+
+	if !strings.Contains(err.Error(), "dial tcp") {
+		t.Errorf("InitRedis should return a connection error, but got: %v", err)
+	}
 }
