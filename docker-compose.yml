@@ -1,5 +1,20 @@
 version: '3.2'
 
+x-def-logging: &default-logging
+  logging:
+    # Указываем, какой драйвер использовать
+    driver: "loki"
+    options:
+      # Адрес Loki, куда складывать логи
+      # Обратите внимание, что здесь используется не имя сервиса loki, а локальный хост, на который проброшен порт Loki,
+      # это сделано потому, что логи будет писать docker engine, котрый расположен на хостовой машине,
+      # и он не знает имени хоста контейнера Loki, которое ему присвоил compose во внутренней сети проекта.
+      loki-url: "http://localhost:3100/loki/api/v1/push"
+      loki-batch-size: "100"
+      loki-retries: 2
+      loki-max-backoff: 1000ms
+      loki-timeout: 1s
+
 services:
   postgres:
     image: postgres
@@ -23,25 +38,72 @@ services:
       - ./data:/data  
   auth-service:
     build:
-      context: ./auth-service  # Обрати внимание на путь
+      context: ./auth-service
       dockerfile: Dockerfile
     container_name: auth-service-container
+    <<: *default-logging
     # restart: always
     ports:
       - "8081:8081"
-
-
   api-gateway:
     build:
-      context: ./api-gateway  # Убедись, что путь верный
+      context: ./api-gateway
       dockerfile: Dockerfile
     container_name: api-gateway-container
+    <<: *default-logging
     # restart: always
     ports:
       - "8080:8080"
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+  loki:
+    hostname: loki
+    image: grafana/loki:latest
+    environment:
+      TZ: ${SYSTEM_TIMEZONE:-Europe/Moscow}
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+  promtail:
+    image: grafana/promtail:2.4.1
+    container_name: promtail
+    
+    volumes:
+      - /var/log:/var/log
+      - /home/ares/distributed_task_system/promtail-config.yml:/home/ares/distributed_task_system/promtail-config.yml
+    command: -config.file=/home/ares/distributed_task_system/promtail-config.yml
 
-  
-
+  # nginx:
+  #   image: nginx
+  #   hostname: nginx-entrypoint
+  #   container_name: nginx-entrypoint
+  #   restart: unless-stopped
+  #   <<: *default-logging
+  #   environment:
+  #     TZ: "Europe/Moscow"
+  #   ports:
+  #     - 83:83
+  #   healthcheck:
+  #     test: [ "CMD", "curl", "-f", "http://localhost" ]
+  #     interval: 10s
+  #     timeout: 10s
+  #     retries: 20
 
 volumes:
   db_data:
