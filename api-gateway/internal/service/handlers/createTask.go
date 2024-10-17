@@ -10,7 +10,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s *service) CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Service) CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	task := model.Task{
 		Status: r.URL.Query().Get("status"),
 	}

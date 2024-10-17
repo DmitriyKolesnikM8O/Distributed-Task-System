@@ -9,12 +9,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-var (
-	cfg       = config.GetConfig()
-	secretKey = []byte(cfg.SecretKey.Secret)
-)
-
-func JWTMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(http.ResponseWriter, *http.Request) {
+func JWTMiddleware(cfg *config.Config, next func(w http.ResponseWriter, r *http.Request)) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("jwt")
 		if err != nil {
@@ -24,9 +19,10 @@ func JWTMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(http.
 		}
 
 		token, err := jwt.ParseWithClaims(cookie.Value, &Claims{}, func(token *jwt.Token) (interface{}, error) {
-			return secretKey, nil
+			return []byte(cfg.SecretKey.Secret), nil
 		})
 		if err != nil {
+			log.Printf("JWT: %s\n", cfg.SecretKey.Secret)
 			log.Printf("JWT невалиден: %s", err)
 			http.Error(w, "JWT невалиден", http.StatusUnauthorized)
 			return
@@ -34,6 +30,7 @@ func JWTMiddleware(next func(w http.ResponseWriter, r *http.Request)) func(http.
 
 		claims, ok := token.Claims.(*Claims)
 		if !ok {
+
 			log.Printf("JWT невалиден: %s", err)
 			http.Error(w, "JWT невалиден", http.StatusUnauthorized)
 			return

@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (s *service) GetTaskHandler(w http.ResponseWriter, r *http.Request) {
+func (s *Service) GetTaskHandler(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["id"]
 	if id == "" {
 		w.WriteHeader(http.StatusBadRequest)

@@ -33,7 +33,7 @@ func Start(r *mux.Router) {
 	log.Printf("DB connected")
 
 	service := handlers.New(db, rdb)
-	service.Register(r)
+	service.Register(r, cfg)
 
 	port := cfg.Listen.Port
 	log.Printf("Listening on :%s", port)
