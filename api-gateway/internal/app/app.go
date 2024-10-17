@@ -10,10 +10,14 @@ import (
 	repository "github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/repository/postgreSQL"
 	"github.com/KolesnikM8O/distributed-task-system/api-gateway/internal/service/handlers"
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func Start(r *mux.Router) {
 	log.Printf("Start app")
+
+	http.Handle("/metrics", promhttp.Handler())
+	log.Println("Metrics server on :9090...")
 
 	cfg := config.GetConfig()
 
@@ -37,5 +41,5 @@ func Start(r *mux.Router) {
 
 	port := cfg.Listen.Port
 	log.Printf("Listening on :%s", port)
-	http.ListenAndServe(":"+port, r)
+	log.Fatal(http.ListenAndServe(":"+port, r))
 }

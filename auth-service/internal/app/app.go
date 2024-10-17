@@ -9,10 +9,14 @@ import (
 	repository "github.com/KolesnikM8O/distributed-task-system/auth-service/internal/repository/postgreSQL"
 	"github.com/KolesnikM8O/distributed-task-system/auth-service/internal/service/handlers"
 	"github.com/gorilla/mux"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func Start(r *mux.Router) {
 	log.Printf("Start auth-service")
+
+	http.Handle("/metrics", promhttp.Handler())
+	log.Println("Metrics server on :9090...")
 
 	log.Printf("Connecting to DB")
 
