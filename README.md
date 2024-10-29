@@ -1,194 +1,96 @@
-# Distributed Task System (Pet Project)
-
-{Golang}
-
-
-[![N|Solid](https://cldup.com/dTxpPi9lDf.thumb.png)](https://nodesource.com/products/nsolid)
+# Distributed Task System
+## 2 microservices
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+![Golang](https://img.shields.io/badge/Golang-v1.23-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Docker](https://img.shields.io/badge/Docker-supported-green.svg)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v17-blue.svg)
+![Redis](https://img.shields.io/badge/Redis-v7.2-red.svg)
+![Git](https://img.shields.io/badge/Git-v2.39.1-orange.svg)
+![Prometheus and Grafana](https://img.shields.io/badge/Prometheus-Grafana-green.svg)
+![Help](https://img.shields.io/badge/help-me-brightgreen.svg)
+![Project Status](https://img.shields.io/badge/project-active-red.svg)
+![Programmer](https://img.shields.io/badge/-I'm%20a%20programmer-yellow.svg)
 
-Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible,
-AngularJS-powered HTML5 Markdown editor.
 
-- Type some Markdown on the left
-- See HTML in the right
-- ✨Magic ✨
+A small home project for training in microservice architecture and writing applications in Golang.
 
-## Features
 
-- Import a HTML file and watch it magically convert to Markdown
-- Drag and drop images (requires your Dropbox account be linked)
-- Import and save files from GitHub, Dropbox, Google Drive and One Drive
-- Drag and drop markdown and HTML files into Dillinger
-- Export documents as Markdown, HTML and PDF
 
-Markdown is a lightweight markup language based on the formatting conventions
-that people naturally use in email.
-As [John Gruber] writes on the [Markdown site][df1]
+## Features 
 
-> The overriding design goal for Markdown's
-> formatting syntax is to make it as readable
-> as possible. The idea is that a
-> Markdown-formatted document should be
-> publishable as-is, as plain text, without
-> looking like it's been marked up with tags
-> or formatting instructions.
+- The whole project and all parts are raised in Docker
+- PostgreSQL is used as the database
+- Redis is used as a cache
+- There are 2 microservices: CRUD for tasks and a service for authorization
+- JWT tokens are used in Cookies for security
+- All logs and other information are displayed in Grafana, collected using Prometheus
+- Microservices communicate through REST
+- The project is executed using Clean Architecture, separation of levels, abstractions
+- Some parts of the code are covered by unit testing
+- Users and Tasks stores in different tables
 
-This text you see here is *actually- written in Markdown! To get a feel
-for Markdown's syntax, type some text into the left window and
-watch the results in the right.
 
 ## Tech
 
 Dillinger uses a number of open source projects to work properly:
 
-- [AngularJS] - HTML enhanced for web apps!
-- [Ace Editor] - awesome web-based text editor
-- [markdown-it] - Markdown parser done right. Fast and easy to extend.
-- [Twitter Bootstrap] - great UI boilerplate for modern web apps
-- [node.js] - evented I/O for the backend
-- [Express] - fast node.js network app framework [@tjholowaychuk]
-- [Gulp] - the streaming build system
-- [Breakdance](https://breakdance.github.io/breakdance/) - HTML
-to Markdown converter
-- [jQuery] - duh
+- Golang - Backend
+- PostgreSQL - DB
+- Redis - Cache 
+- Prometheus/Grafana - logs, metrics
+- Docker - launch
+- REST API - A means of communication for microservices
+- Clean Code - Architecture Style
+- 2 Tables - For task and for users
 
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
+API Endpoints:
 
-## Installation
+- api-gateway service
 
-Dillinger requires [Node.js](https://nodejs.org/) v10+ to run.
+  - **GET TASK BY ID:** GET localhost:8080/task/{id}
+  - **CREATE TASK:** POST localhost:8080/task
+  - **UPDATE TASK BY ID:** PUT localhost:8080/task/{id}
+  - **DELETE TASK BY ID:** DELETE localhost:8080/task/{id}
+- auth-service service
+  
+   - **LOGIN:** POST localhost:8081/login
+   - **SIGNUP:** POST localhost:8081/signup
 
-Install the dependencies and devDependencies and start the server.
+You can send the data in the request body. For more information, see the code. A response is returned for each request. If the error is an explanation of why it occurred
 
-```sh
-cd dillinger
-npm i
-node app
-```
+## How to Run
 
-For production environments...
-
-```sh
-npm install --production
-NODE_ENV=production node app
-```
-
-## Plugins
-
-Dillinger is currently extended with the following plugins.
-Instructions on how to use them in your own application are linked below.
-
-| Plugin | README |
-| ------ | ------ |
-| Dropbox | [plugins/dropbox/README.md][PlDb] |
-| GitHub | [plugins/github/README.md][PlGh] |
-| Google Drive | [plugins/googledrive/README.md][PlGd] |
-| OneDrive | [plugins/onedrive/README.md][PlOd] |
-| Medium | [plugins/medium/README.md][PlMe] |
-| Google Analytics | [plugins/googleanalytics/README.md][PlGa] |
-
-## Development
-
-Want to contribute? Great!
-
-Dillinger uses Gulp + Webpack for fast developing.
-Make a change in your file and instantaneously see your updates!
-
-Open your favorite Terminal and run these commands.
-
-First Tab:
+1. Clone this repository
 
 ```sh
-node app
+git clone [git@github.com:vas3k/pepic.git](https://github.com/DmitriyKolesnikM8O/distributed_task_system)
+cd distrubuted_task_system
 ```
 
-Second Tab:
+2. Assembling images of each of the microservices
 
 ```sh
-gulp watch
+cd api-gateway
+docker build -t prod-service:local . 
+cd ..
+cd auth-service
+docker build -t prod-service:local . 
 ```
 
-(optional) Third:
+3. Launching docker containers
 
 ```sh
-karma test
+docker-compose up -d
 ```
 
-#### Building for source
+After that, the entire application will be launched
 
-For production release:
+## LICENSE
 
-```sh
-gulp build --prod
-```
+***MIT*** 
 
-Generating pre-built zip archives for distribution:
+You can use the entire code and the entire project as you see fit. Good Luck! 😊 😊 😊
 
-```sh
-gulp build dist --prod
-```
-
-## Docker
-
-Dillinger is very easy to install and deploy in a Docker container.
-
-By default, the Docker will expose port 8080, so change this within the
-Dockerfile if necessary. When ready, simply use the Dockerfile to
-build the image.
-
-```sh
-cd dillinger
-docker build -t <youruser>/dillinger:${package.json.version} .
-```
-
-This will create the dillinger image and pull in the necessary dependencies.
-Be sure to swap out `${package.json.version}` with the actual
-version of Dillinger.
-
-Once done, run the Docker image and map the port to whatever you wish on
-your host. In this example, we simply map port 8000 of the host to
-port 8080 of the Docker (or whatever port was exposed in the Dockerfile):
-
-```sh
-docker run -d -p 8000:8080 --restart=always --cap-add=SYS_ADMIN --name=dillinger <youruser>/dillinger:${package.json.version}
-```
-
-> Note: `--capt-add=SYS-ADMIN` is required for PDF rendering.
-
-Verify the deployment by navigating to your server address in
-your preferred browser.
-
-```sh
-127.0.0.1:8000
-```
-
-## License
-
-MIT
-
-**Free Software, Hell Yeah!**
-
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
-
-   [dill]: <https://github.com/joemccann/dillinger>
-   [git-repo-url]: <https://github.com/joemccann/dillinger.git>
-   [john gruber]: <http://daringfireball.net>
-   [df1]: <http://daringfireball.net/projects/markdown/>
-   [markdown-it]: <https://github.com/markdown-it/markdown-it>
-   [Ace Editor]: <http://ace.ajax.org>
-   [node.js]: <http://nodejs.org>
-   [Twitter Bootstrap]: <http://twitter.github.com/bootstrap/>
-   [jQuery]: <http://jquery.com>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
-   [express]: <http://expressjs.com>
-   [AngularJS]: <http://angularjs.org>
-   [Gulp]: <http://gulpjs.com>
-
-   [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
-   [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
-   [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
-   [PlOd]: <https://github.com/joemccann/dillinger/tree/master/plugins/onedrive/README.md>
-   [PlMe]: <https://github.com/joemccann/dillinger/tree/master/plugins/medium/README.md>
-   [PlGa]: <https://github.com/RahulHP/dillinger/blob/master/plugins/googleanalytics/README.md>
+![The Future is Now](https://img.shields.io/badge/2024-%20The%20Future%20is%20Now-blue.svg)

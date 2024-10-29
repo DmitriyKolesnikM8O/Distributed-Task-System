@@ -1,0 +1,15 @@
+---
+listen:
+  bind_ip: 127.0.0.1
+  port: 8080
+storage:
+  host: localhost
+  port: 5432
+  database: postgres
+  username: postgres
+  password: postgres
+jwt:
+  secret: "secret_key"
+redis:
+  host: localhost
+  port: 6379

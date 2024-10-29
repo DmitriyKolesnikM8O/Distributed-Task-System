@@ -1,7 +1,2 @@
 data/
-api-gateway/internal/config/config.yml
-auth-service/internal/config/config.yml
-api-gateway/internal/repository/postgreSQL/config_for_test.go
-auth-service/internal/repository/postgreSQL/config_for_test.go
-api-gateway/internal/redis/config_for_test.go
 Makefile
