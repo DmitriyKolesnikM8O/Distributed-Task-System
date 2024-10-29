@@ -65,7 +65,7 @@ You can send the data in the request body. For more information, see the code. A
 1. Clone this repository
 
 ```sh
-git clone [git@github.com:vas3k/pepic.git](https://github.com/DmitriyKolesnikM8O/distributed_task_system)
+git clone (https://github.com/DmitriyKolesnikM8O/distributed_task_system)
 cd distrubuted_task_system
 ```
 
