@@ -94,3 +94,4 @@ After that, the entire application will be launched
 You can use the entire code and the entire project as you see fit. Good Luck! 😊 😊 😊
 
 ![The Future is Now](https://img.shields.io/badge/2024-%20The%20Future%20is%20Now-blue.svg)
+![Visitor Count](https://komarev.com/ghpvc/?username=DmitriyKolesnikM8O&repo=Distributed-Task-System&label=Visitors&color=007ec6&style=flat-square&abbreviated=true)
